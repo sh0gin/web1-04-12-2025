@@ -86,25 +86,25 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'user'],
-                "POST registr" => 'user/register',
+                "POST school-api/registr" => 'user/register',
                 "OPTIONS registr" => 'user/options',
 
-                "POST auth" => 'user/login',
+                "POST school-api/auth" => 'user/login',
                 "OPTIONS auth" => 'user/options',
 
-                "GET courses" => 'site/courses',
+                "GET school-api/courses" => 'site/courses',
                 "OPTIONS courses" => 'site/options',
 
-                "GET courses/<course_id>" => 'site/get-video',
+                "GET school-api/courses/<course_id>" => 'site/get-video',
                 "OPTIONS courses/<course_id>" => 'site/options',
 
-                "POST courses/<course_id>/buy" => 'site/buy-courses',
+                "POST school-api/courses/<course_id>/buy" => 'site/buy-courses',
                 "OPTIONS courses/<course_id>/buy" => 'site/options',
 
-                "GET order/<id>" => 'site/cancel',
+                "GET school-api/order/<id>" => 'site/cancel',
                 "OPTIONS order/<id>" => 'site/options',
 
-                "GET orders" => 'site/get-user-courses',
+                "GET school-api/orders" => 'site/get-user-courses',
                 "OPTIONS orders" => 'site/options',
             ],
 

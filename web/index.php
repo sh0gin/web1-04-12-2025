@@ -7,6 +7,10 @@ defined('YII_ENV') or define('YII_ENV', 'dev');
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
 
-$config = require __DIR__ . '/../config/web.php';
+if (str_contains($_SERVER['REQUEST_URI'], 'api')) {
+    $config = require __DIR__ . '/../config/web.php';
+} else {
+    $config = require __DIR__ . '/../config/web_panel.php';
+}
 
 (new yii\web\Application($config))->run();
