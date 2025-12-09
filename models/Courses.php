@@ -21,7 +21,7 @@ use Yii;
  */
 class Courses extends \yii\db\ActiveRecord
 {
-
+    public $image_full;
 
     /**
      * {@inheritdoc}
@@ -39,9 +39,14 @@ class Courses extends \yii\db\ActiveRecord
         return [
             [['name', 'description', 'hours', 'img', 'start_date', 'end_date', 'price'], 'required'],
             [['hours'], 'integer'],
+            ['name', 'string', 'max' => 30],
+            ['description', 'string', 'max' => 100],
+            ['hours', 'compare', 'compareValue' => 10, 'operator' => "<="],
+            ['price', 'compare', 'compareValue' => 100, 'operator' => ">="],
             [['start_date', 'end_date'], 'safe'],
             [['price'], 'number'],
-            [['name', 'description', 'img'], 'string', 'max' => 255],
+            ['image_full', 'file', 'extensions' => ['jpeg', 'jpg']],
+            ['img', 'string'],
         ];
     }
 

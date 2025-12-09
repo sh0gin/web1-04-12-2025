@@ -63,16 +63,12 @@ class DefaultController extends Controller
     {
         $model = new Courses();
         if ($model->load(Yii::$app->request->post())) {
-            $img = UploadedFile::getInstance($model, 'img');
-            // VarDumper::dump($img, 10, true); die;
-            $model->img = $img->name;
+            $model->image_full = UploadedFile::getInstance($model, 'img');
+            $model->img = $model->image_full->name;
             if ($model->save()) {
 
-                return $this->render('category');
-            } else {
-                VarDumper::dump($model, 10, true);
-                die;
-            }
+                return $this->render('category'); // а я могу здесь сыллку на функцию сделать?
+            } 
         }
 
         return $this->render('add-courses', [
