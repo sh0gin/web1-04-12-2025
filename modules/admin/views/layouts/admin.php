@@ -43,73 +43,18 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
     <header id="header">
         <nav class="mt-3 d-flex justify-content-between fs-2">
-            <a href="category.html" class="text-primary text-decoration-none">Category</a>
-            <a href="index.html" class="text-primary text-decoration-none">Goods</a>
-            <a href="orders.html" class="text-primary text-decoration-none">Orders</a>
+            <a href="/course-admin/default/category" class="text-primary text-decoration-none">Курсы</a>
+            <a href="/course-admin/default/goods" class="text-primary text-decoration-none">Goods</a>
+            <a href="/course-admin/default/orders" class="text-primary text-decoration-none">Orders</a>
             <div>
-                <a href="login.html" class="login text-decoration-none">Login</a>
+                <a href="/course-admin/default/login" class="login text-decoration-none">Login</a>
             </div>
         </nav>
     </header>
+    <h1><?= $this->params['title'] ?></h1>
 
-   <section class="container">
-        <article class="card my-3">
-            <div class="card-title bg-secondary bg-gradient p-3 text-light d-flex justify-content-between">
-                <h3>Good name</h3>
-                <a href="" title="Delete good" class="btn-danger py-1 px-2 justify-content-center text-decoration-none fs-4">&#x2620;</a>
-            </div>
-            <div class="card-body d-flex justify-content-between">
-                <div class="card-img">
-                    <img src="/courseadmin/img/default.jpg" alt="Название товара">
-                </div>
-                <div class="card-info">
-                    <p class="card-text text-black-50"><span class="text-dark">About: </span>Lorem ipsum dolor sit amet,
-                        consecter.</p>
-                    <p class="card-text text-danger d-flex justify-content-end">2 499.99 ₽</p>
-                </div>
-            </div>
-            <div class="card-footer d-flex justify-content-end">
-                <a href="good.html" class="btn btn-primary fs-3">More about</a>
-            </div>
-        </article>
-        <article class="card my-3">
-            <div class="card-title bg-secondary bg-gradient p-3 text-light d-flex justify-content-between">
-                <h3>Good name</h3>
-                <a href="" title="Delete good" class="btn-danger py-1 px-2 justify-content-center text-decoration-none fs-4">&#x2620;</a>
-            </div>
-            <div class="card-body d-flex justify-content-between">
-                <div class="card-img">
-                    <img src="/courseadmin/img/default.jpg" alt="Название товара">
-                </div>
-                <div class="card-info">
-                    <p class="card-text text-black-50"><span class="text-dark">About: </span>Lorem ipsum dolor sit amet,
-                        consecter.</p>
-                    <p class="card-text text-danger d-flex justify-content-end">3 599.99 ₽</p>
-                </div>
-            </div>
-            <div class="card-footer d-flex justify-content-end">
-                <a href="good.html" class="btn btn-primary fs-3">More about</a>
-            </div>
-        </article>
-        <article class="card my-3">
-            <div class="card-title bg-secondary bg-gradient p-3 text-light d-flex justify-content-between">
-                <h3>Good name</h3>
-                <a href="" title="Delete good" class="btn-danger py-1 px-2 justify-content-center text-decoration-none fs-4">&#x2620;</a>
-            </div>
-            <div class="card-body d-flex justify-content-between">
-                <div class="card-img">
-                    <img src="/courseadmin/img/default.jpg" alt="Название товара">
-                </div>
-                <div class="card-info">
-                    <p class="card-text text-black-50"><span class="text-dark">About: </span>Lorem ipsum dolor sit amet,
-                        consecter.</p>
-                    <p class="card-text text-danger d-flex justify-content-end">6 499.99 ₽</p>
-                </div>
-            </div>
-            <div class="card-footer d-flex justify-content-end">
-                <a href="good.html" class="btn btn-primary fs-3">More about</a>
-            </div>
-        </article>
+    <section class="container">
+        <?= $content ?>
     </section>
     <?php $this->endBody() ?>
 </body>

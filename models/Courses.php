@@ -52,13 +52,13 @@ class Courses extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'description' => 'Description',
-            'hours' => 'Hours',
-            'img' => 'Img',
-            'start_date' => 'Start Date',
-            'end_date' => 'End Date',
-            'price' => 'Price',
+            'name' => 'Название',
+            'description' => 'Описание',
+            'hours' => 'Длительность',
+            'img' => 'Обложка',
+            'start_date' => 'Начало курса',
+            'end_date' => 'Конец курса',
+            'price' => 'Стоимость',
         ];
     }
 

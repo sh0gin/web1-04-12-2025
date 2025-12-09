@@ -17,61 +17,62 @@ use yii\data\ActiveDataProvider;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\ActiveController;
 
-class SiteController extends ActiveController
+class SiteController extends Controller//ActiveController
 {
+
     public $modelClass = '';
     public $enableCsrfValidation = '';
 
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
+    // public function behaviors()
+    // {
+    //     $behaviors = parent::behaviors();
 
-        // remove authentication filter
-        $auth = $behaviors['authenticator'];
-        unset($behaviors['authenticator']);
+    //     // remove authentication filter
+    //     $auth = $behaviors['authenticator'];
+    //     unset($behaviors['authenticator']);
 
-        // add CORS filter
-        $behaviors['corsFilter'] = [
-            'class' => \yii\filters\Cors::class,
-            'cors' => [
-                'Origin' => [isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : 'http://' . $_SERVER['REMOTE_ADDR']],
-                'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-                'Access-Control-Request-Headers' => ['*'],
-            ],
-            'actions' => [
-                'courses' => [
-                    'Access-Control-Allow-Credentials' => true,
-                ],
-                'get-video' => [
-                    'Access-Control-Allow-Credentials' => true,
-                ],
-                'but-courses' => [
-                    'Access-Control-Allow-Credentials' => true,
-                ],
-                'cancel' => [
-                    'Access-Control-Allow-Credentials' => true,
-                ],
-                'get-user-courses' => [
-                    'Access-Control-Allow-Credentials' => true,
-                ],
-            ]
-        ];
+    //     // add CORS filter
+    //     $behaviors['corsFilter'] = [
+    //         'class' => \yii\filters\Cors::class,
+    //         'cors' => [
+    //             'Origin' => [isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : 'http://' . $_SERVER['REMOTE_ADDR']],
+    //             'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+    //             'Access-Control-Request-Headers' => ['*'],
+    //         ],
+    //         'actions' => [
+    //             'courses' => [
+    //                 'Access-Control-Allow-Credentials' => true,
+    //             ],
+    //             'get-video' => [
+    //                 'Access-Control-Allow-Credentials' => true,
+    //             ],
+    //             'but-courses' => [
+    //                 'Access-Control-Allow-Credentials' => true,
+    //             ],
+    //             'cancel' => [
+    //                 'Access-Control-Allow-Credentials' => true,
+    //             ],
+    //             'get-user-courses' => [
+    //                 'Access-Control-Allow-Credentials' => true,
+    //             ],
+    //         ]
+    //     ];
 
-        $auth = [
-            'class' => HttpBearerAuth::class,
-            'only' => ['courses', 'get-video', 'buy-courses', 'get-user-courses', 'cancel'], // только те action, для которых будет применяться аутентификация
-        ];
+    //     $auth = [
+    //         'class' => HttpBearerAuth::class,
+    //         'only' => ['courses', 'get-video', 'buy-courses', 'get-user-courses', 'cancel'], // только те action, для которых будет применяться аутентификация
+    //     ];
 
-        // re-add authentication filter
-        $behaviors['authenticator'] = $auth;
-        // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
-        $behaviors['authenticator']['except'] = ['options'];
+    //     // re-add authentication filter
+    //     $behaviors['authenticator'] = $auth;
+    //     // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
+    //     $behaviors['authenticator']['except'] = ['options'];
 
-        return $behaviors;
-    }
+    //     return $behaviors;
+    // }
 
     /**
      * {@inheritdoc}

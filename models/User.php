@@ -112,4 +112,12 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function getIsAdmin() {
         return $this->role == 1;
     }
+
+    public static function findByUsername($email) {
+        return self::findOne(['email' => $email]);
+    }
+
+    public function validatePassword($password) {
+        return Yii::$app->security->validatePassword($password, $this->password);
+    }
 }
