@@ -1,4 +1,6 @@
-
+.card {
+    top: 350px;
+}
 
 main > .container {
     padding: 70px 15px 20px;

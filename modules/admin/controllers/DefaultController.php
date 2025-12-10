@@ -4,8 +4,10 @@ namespace app\modules\admin\controllers;
 
 use app\models\Courses;
 use app\models\LoginForm;
+use app\models\User;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
 use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\UploadedFile;
@@ -15,6 +17,33 @@ use yii\web\UploadedFile;
  */
 class DefaultController extends Controller
 {
+
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['login'],
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => fn() => Yii::$app->user->identity->isAdmin,
+                    ],
+                ],
+                'denyCallback' => function () {
+                    if (Yii::$app->user->isGuest) {
+                        return Yii::$app->response->redirect('/course-admin/default/login');
+                    }
+                }
+            ],
+        ];
+    }
 
     public $defaultAction = 'login';
     /**
@@ -28,6 +57,7 @@ class DefaultController extends Controller
 
     public function actionCategory()
     {
+        // Yii::$app->user->logout();
         $query = Courses::find();
 
         $dataProvider = new ActiveDataProvider([
@@ -44,14 +74,9 @@ class DefaultController extends Controller
 
     public function actionLogin()
     {
-        // var_dump(Yii::$app->security->generatePasswordHash('admin')); die;
-        if (!Yii::$app->user->isGuest) {
-            return $this->render('orders');
-        }
-
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->render('orders');
+            return $this->redirect('orders');
         }
 
         return $this->render('login', [
@@ -59,8 +84,21 @@ class DefaultController extends Controller
         ]);
     }
 
+    public function actionLogout()
+    {
+        $model = new LoginForm();
+        $user = User::findOne([Yii::$app->user->id]);
+        $user->authKey = null;
+        $user->save(false);
+        Yii::$app->user->logout();
+        return $this->render('login', [
+            'model' => $model
+        ]);
+    }
+
     public function actionAddCourses()
     {
+
         $model = new Courses();
         if ($model->load(Yii::$app->request->post())) {
             $model->image_full = UploadedFile::getInstance($model, 'img');
@@ -68,7 +106,7 @@ class DefaultController extends Controller
             if ($model->save()) {
 
                 return $this->render('category'); // а я могу здесь сыллку на функцию сделать?
-            } 
+            }
         }
 
         return $this->render('add-courses', [
@@ -78,20 +116,27 @@ class DefaultController extends Controller
 
     public function actionOrders()
     {
+
         return $this->render('orders');
     }
+
     public function actionGoods()
     {
+
         return $this->render('goods');
     }
+
     public function actionAddCategory()
     {
+
         return $this->render('add-category');
     }
+
     public function actionAddGood()
     {
         return $this->render('add-good');
     }
+
     public function actionCategoryView()
     {
         return $this->render('category-view');

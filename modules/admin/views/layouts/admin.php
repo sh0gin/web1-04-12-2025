@@ -43,19 +43,28 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
     <header id="header">
         <nav class="mt-3 d-flex justify-content-between fs-2">
-            <a href="/course-admin/default/category" class="text-primary text-decoration-none">Курсы</a>
-            <a href="/course-admin/default/goods" class="text-primary text-decoration-none">Goods</a>
-            <a href="/course-admin/default/orders" class="text-primary text-decoration-none">Orders</a>
-            <div>
+            <a href="/course-admin/courses" class="text-primary text-decoration-none">Курсы</a>
+            <a href="/course-admin/video" class="text-primary text-decoration-none">Лекции</a>
+            <a href="/course-admin/user" class="text-primary text-decoration-none">Юзеры</a>
+            <?php if (!Yii::$app->user->isGuest) { ?>
+                <a href="/course-admin/default/logout" class="text-primary text-decoration-none">Выйти</a>
+            <?php
+            }
+            ?>
+            <!-- <div>
                 <a href="/course-admin/default/login" class="login text-decoration-none">Login</a>
-            </div>
+            </div> -->
         </nav>
     </header>
-    <h1><?= $this->params['title'] ?></h1>
 
-    <section class="container">
-        <?= $content ?>
-    </section>
+    
+
+    <div class='offset'>
+        <section class="container">
+            <?= $content ?>
+        </section>
+
+    </div>
     <?php $this->endBody() ?>
 </body>
 

@@ -109,10 +109,7 @@ $config = [
 
                 "GET school-api/orders" => 'site/get-user-courses',
                 "OPTIONS orders" => 'site/options',
-
             ],
-
-
         ]
 
     ],

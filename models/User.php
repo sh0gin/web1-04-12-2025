@@ -110,7 +110,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     public function getIsAdmin() {
-        return $this->role == 1;
+        return $this->role_id == 2;
     }
 
     public static function findByUsername($email) {
