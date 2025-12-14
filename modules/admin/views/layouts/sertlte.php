@@ -27,7 +27,7 @@ use yii\bootstrap5\NavBar;
 <?php $this->beginBody() ?>
 
 <div class="background-image">
-    <img src="assets/img/ser_bg.png" alt="Certificate Background">
+    <img src="/web/img/ser_bg.png" alt="Certificate Background">
 </div>
 <div class="sertificate">
     <button class="print-button" onclick="window.print()">Print</button>

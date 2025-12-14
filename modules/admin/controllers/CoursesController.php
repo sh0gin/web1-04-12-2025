@@ -4,9 +4,14 @@ namespace app\modules\admin\controllers;
 
 use app\models\Courses;
 use app\models\CoursesSearch;
+use app\models\Video;
+use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\VarDumper;
+use yii\web\UploadedFile;
 
 /**
  * CoursesController implements the CRUD actions for Courses model.
@@ -22,7 +27,7 @@ class CoursesController extends Controller
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -55,8 +60,14 @@ class CoursesController extends Controller
      */
     public function actionView($id)
     {
+        $query = Video::find()->where(['courses_id' => $id]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -67,18 +78,21 @@ class CoursesController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Courses();
-
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+        $model = new Courses(['scenario' => Courses::REGISTER]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->image_full = UploadedFile::getInstance($model, 'img');
+            $model->img = 'df';
+            if ($model->validate()) {
+                $model->img = $model->upload();
+                // $model->img = 'mpic_' . substr(time(), -5) . '.' . $model->image_full->extension;            
+                // VarDumper::dump($model->attributes, 10, true); die;
+                $model->save(false);
+                return $this->redirect(['view', 'id' => $model->id]); // а я могу здесь сыллку на функцию сделать?
             }
-        } else {
-            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'model' => $model
         ]);
     }
 
@@ -92,13 +106,24 @@ class CoursesController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $model->scenario = Courses::UPDATE;
+        $img = $model->img;
+        if ($model->load(Yii::$app->request->post())) {
+            if (!$model->img) {
+                $model->img = $img;
+            }
+            $model->image_full = UploadedFile::getInstance($model, 'img');
+            if ($model->validate()) {
+                if ($model->image_full) {
+                    $model->img = $model->upload();
+                }
+                $model->save(false);
+                return $this->redirect(['view', 'id' => $model->id]); // а я могу здесь сыллку на функцию сделать?
+            }
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'model' => $model
         ]);
     }
 

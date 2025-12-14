@@ -29,7 +29,7 @@ use yii\bootstrap5\ActiveForm;
                 </div>
                 <div class="mb-5">
                     <?= $form->field($model, 'start_date', ['options' => ['class' => "form-label fs-2"]])->textInput(['type' => 'date', 'options' => ['class' => "form-control fs-2"]]) ?>
-                </div>
+                </div> 
                 <div class="mb-5">
                     <?= $form->field($model, 'end_date', ['options' => ['class' => "form-label fs-2"]])->textInput(['type' => 'date', 'options' => ['class' => "form-control fs-2"]]) ?>
                 </div>
@@ -41,7 +41,7 @@ use yii\bootstrap5\ActiveForm;
 
                 <div class="form-group">
                     <div>
-                        <?= Html::submitButton('Login', ['class' => 'btn btn-primary w-100 my-2 fs-2', 'name' => 'login-button']) ?>
+                        <?= Html::submitButton('Save', ['class' => 'btn btn-primary w-100 my-2 fs-2', 'name' => 'save-button']) ?>
                     </div>
                 </div>
                 <?php ActiveForm::end(); ?>

@@ -17,7 +17,7 @@ use yii\data\ActiveDataProvider;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\ActiveController;
 
-class SiteController extends Controller//ActiveController
+class SiteController extends ActiveController
 {
 
     public $modelClass = '';
@@ -26,53 +26,53 @@ class SiteController extends Controller//ActiveController
     /**
      * {@inheritdoc}
      */
-    // public function behaviors()
-    // {
-    //     $behaviors = parent::behaviors();
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
 
-    //     // remove authentication filter
-    //     $auth = $behaviors['authenticator'];
-    //     unset($behaviors['authenticator']);
+        // remove authentication filter
+        $auth = $behaviors['authenticator'];
+        unset($behaviors['authenticator']);
 
-    //     // add CORS filter
-    //     $behaviors['corsFilter'] = [
-    //         'class' => \yii\filters\Cors::class,
-    //         'cors' => [
-    //             'Origin' => [isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : 'http://' . $_SERVER['REMOTE_ADDR']],
-    //             'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-    //             'Access-Control-Request-Headers' => ['*'],
-    //         ],
-    //         'actions' => [
-    //             'courses' => [
-    //                 'Access-Control-Allow-Credentials' => true,
-    //             ],
-    //             'get-video' => [
-    //                 'Access-Control-Allow-Credentials' => true,
-    //             ],
-    //             'but-courses' => [
-    //                 'Access-Control-Allow-Credentials' => true,
-    //             ],
-    //             'cancel' => [
-    //                 'Access-Control-Allow-Credentials' => true,
-    //             ],
-    //             'get-user-courses' => [
-    //                 'Access-Control-Allow-Credentials' => true,
-    //             ],
-    //         ]
-    //     ];
+        // add CORS filter
+        $behaviors['corsFilter'] = [
+            'class' => \yii\filters\Cors::class,
+            'cors' => [
+                'Origin' => [isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : 'http://' . $_SERVER['REMOTE_ADDR']],
+                'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+                'Access-Control-Request-Headers' => ['*'],
+            ],
+            'actions' => [
+                'courses' => [
+                    'Access-Control-Allow-Credentials' => true,
+                ],
+                'get-video' => [
+                    'Access-Control-Allow-Credentials' => true,
+                ],
+                'but-courses' => [
+                    'Access-Control-Allow-Credentials' => true,
+                ],
+                'cancel' => [
+                    'Access-Control-Allow-Credentials' => true,
+                ],
+                'get-user-courses' => [
+                    'Access-Control-Allow-Credentials' => true,
+                ],
+            ]
+        ];
 
-    //     $auth = [
-    //         'class' => HttpBearerAuth::class,
-    //         'only' => ['courses', 'get-video', 'buy-courses', 'get-user-courses', 'cancel'], // только те action, для которых будет применяться аутентификация
-    //     ];
+        $auth = [
+            'class' => HttpBearerAuth::class,
+            'only' => ['courses', 'get-video', 'buy-courses', 'get-user-courses', 'cancel'], // только те action, для которых будет применяться аутентификация
+        ];
 
-    //     // re-add authentication filter
-    //     $behaviors['authenticator'] = $auth;
-    //     // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
-    //     $behaviors['authenticator']['except'] = ['options'];
+        // re-add authentication filter
+        $behaviors['authenticator'] = $auth;
+        // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
+        $behaviors['authenticator']['except'] = ['options'];
 
-    //     return $behaviors;
-    // }
+        return $behaviors;
+    }
 
     /**
      * {@inheritdoc}
@@ -175,7 +175,7 @@ class SiteController extends Controller//ActiveController
 
         $arr = $dataProvider->getModels();
 
-        foreach($arr as &$value) {
+        foreach ($arr as &$value) {
             $value->img = '/web/img/' . $value->img;
         }
 
@@ -193,8 +193,20 @@ class SiteController extends Controller//ActiveController
     {
         $models = Video::findAll(['courses_id' => $course_id]);
 
+        $result = [];
+
+        foreach ($models as $value) {
+            $result[] = [
+                'id' => $value->id,
+                'name' => $value->name,
+                'description' => $value->description,
+                'video_link' => $value->video_link,
+                'hours' => $value->hours,
+            ];
+        }
+
         return $this->asJson([
-            'data' => $models,
+            'data' => $result,
         ]);
     }
 
@@ -215,37 +227,41 @@ class SiteController extends Controller//ActiveController
                 $model->save();
             }
             return $this->asJson([
-                'pay_url' => 'LINKLINKLINKLINKLINK'
+                'pay_url' => "http://other2/pay?order=$model->id"
             ]);
         } else {
             Yii::$app->response->statusCode = 401;
         }
     }
 
-    public function actionGetUserCourses() {
+    public function actionGetUserCourses()
+    {
         $model = UserOrder::findAll(['user_id' => Yii::$app->user->id]);
 
         $result = [];
 
-        foreach($model as $elem) {
+        foreach ($model as $elem) {
             $course = Courses::findOne($elem->course_id);
 
             $one = [
                 'id' => $elem->id,
                 'payment_status' => PaymentStatus::getTitle($elem->payment_status_id),
-                'name' => $course->name,
-                'description' => $course->description,
-                'hours'  => $course->hours,
-                'img'  => '/web/img/' . $course->img,
-                'start_date'  => $course->start_date,
-                'end_date'  => $course->end_date,
-                'price'  => $course->price,
+                'coure' => [
+                    'id' => $course->id,
+                    'name' => $course->name,
+                    'description' => $course->description,
+                    'hours'  => $course->hours,
+                    'img'  => '/web/img/' . $course->img,
+                    'start_date'  => $course->start_date,
+                    'end_date'  => $course->end_date,
+                    'price'  => $course->price,
+                ]
             ];
             $result[] = $one;
         }
         return $this->asJson([
             'data' => $result,
-        ]);        
+        ]);
     }
 
     public function actionCancel($id)
@@ -264,5 +280,19 @@ class SiteController extends Controller//ActiveController
         } else {
             Yii::$app->response->statusCode = 401;
         }
+    }
+
+    public function actionPaymentWebhook()
+    {
+        $status = Yii::$app->request->post()['status'];
+        $userOrder = UserOrder::findOne(['id' => Yii::$app->request->post('order_id')]);
+        
+        if ($userOrder) {
+            $userOrder->payment_status_id = PaymentStatus::getId($status == 'success' ? 'Успешно' : 'Отклоненно');
+            // return Yii::$app->request->post();
+            $userOrder->save(false);
+        }
+        Yii::$app->response->statusCode = 204;
+        return '';
     }
 }

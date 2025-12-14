@@ -4,10 +4,14 @@ namespace app\modules\admin\controllers;
 
 use app\models\Courses;
 use app\models\User;
+use app\models\UserOrder;
 use app\models\UserSearch;
+use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\VarDumper;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -37,10 +41,19 @@ class UserController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex($id = null)
     {
         $searchModel = new UserSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        if (!$id) {
+            $dataProvider = $searchModel->search($this->request->queryParams);
+        } else {
+            $query = User::find()->innerJoin('user_order', 'user.id = user_order.user_id')->where(['user_order.course_id' => $id]);
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+            ]);
+        }
+
+        
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -56,6 +69,7 @@ class UserController extends Controller
      */
     public function actionView($id)
     {
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -69,9 +83,15 @@ class UserController extends Controller
     public function actionCreate()
     {
         $model = new User();
+        $order = new UserOrder();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
+                $order->load($this->request->post());
+                $order->user_id = $model->id;
+                $order->status_id = 1;
+                $order->payment_status_id = 1;
+                $order->save(false);
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -80,6 +100,7 @@ class UserController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'order' => $order,
         ]);
     }
 
@@ -141,12 +162,19 @@ class UserController extends Controller
         $user = User::findOne($id);
 
 
-        $note = Note::findOne(['user_id' => $id, 'course_id' => $course_id]);
+        $note = UserOrder::findOne(['user_id' => $id, 'course_id' => $course_id]);
         if ($course && $note) {
             $curl = curl_init();
-
+            // $data = ['student_id' => $id, 'course_id' => $course_id];
+            $data = 
+            "{'course_id' : " 
+            . $course_id 
+            . ", 'student_id' : " 
+            . $id 
+            . "}";
+            // var_dump($data); die;
             curl_setopt_array($curl, array(
-                CURLOPT_URL => 'http://snnctdg-m3.prof.ru/create-sertificate',
+                CURLOPT_URL => 'http://other/create-sertificate',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
@@ -154,19 +182,22 @@ class UserController extends Controller
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => array(,),
+                CURLOPT_POSTFIELDS => $data,
+                // переделать как у Макса
                 CURLOPT_HTTPHEADER => array(
-                    'ClientId: login@login123',
                     'Accept: application/json',
-                    'Content-Type: application/json'
+                    'Content-Type: application/json',
+                    'ClientId: gfdhgfhdfghfghd' // логин чампа
                 ),
             ));
 
             $response = curl_exec($curl);
-
+            // Всегда проверяйте наличие ошибок cURL
+            if (curl_errno($curl)) {
+                echo 'cURL error: ' . curl_error($curl);
+            }
             curl_close($curl);
-            echo $response;
-            
+
             $data = json_decode($response);
             $newId = $data->course_number;
             $newId = $newId . substr(time(), -5) . "1";

@@ -56,11 +56,11 @@ class PaymentStatus extends \yii\db\ActiveRecord
         return $this->hasMany(UserOrder::class, ['payment_status_id' => 'id']);
     }
 
-    public static function getId($title) {
+    public static function getId($title): int {
         return self::findOne(['title' => $title])->id;
     }
 
-    public static function getTitle($id) {
+    public static function getTitle($id): string {
         return self::findOne($id)->title;
     }
 }

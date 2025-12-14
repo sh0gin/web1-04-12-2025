@@ -12,14 +12,15 @@ use yii\web\IdentityInterface;
  * @property string $email
  * @property string $password
  * @property int $role_id
- * @property string $authKey
+ * @property string|null $authKey
+ * @property string $name
  *
  * @property Role $role
  * @property UserOrder[] $userOrders
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
-
+    public const REGISTER = 'register';
 
     /**
      * {@inheritdoc}
@@ -35,14 +36,16 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['email', 'password'], 'required'],
+            [['authKey'], 'default', 'value' => null],
+            [['role_id'], 'default', 'value' => 1],
+            [['email', 'password', 'name'], 'required'],
             [['role_id'], 'integer'],
-            [['email', 'password', 'authKey'], 'string', 'max' => 255],
-            [['email'], 'unique', 'on' => 'register'],
-            [['email'], 'email'],
-            [['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::class, 'targetAttribute' => ['role_id' => 'id']],
+            [['email', 'password', 'authKey', 'name'], 'string', 'max' => 255],
+            [['email'], 'unique', 'on' => self::REGISTER],
+            ['email', 'email', 'on' => self::REGISTER],
             ['password', 'string', 'min' => 3],
-            // ['password', 'match', 'pattern' => '/(?=.*[a-z])[a-zA-Z_#!%\d]+/', "message" => "обязательное, минимум 3 символа, с содержанием минимум одного символа верхнего и нижнего регистра, одной цифры и один из спецсимволов «_», «#», «!», «%»"],
+            ['password', 'match', 'pattern' => "/(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])(?=.*[_#!%])[a-zA-z_#!%\d]/", 'message' => 'обязательное, минимум 3 символа, с содержанием минимум одного символа верхнего и нижнего регистра, одной цифры и один из спецсимволов «_», «#», «!», «%»', 'on' => self::REGISTER],
+            [['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::class, 'targetAttribute' => ['role_id' => 'id']],
         ];
     }
 
@@ -53,10 +56,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             'id' => 'ID',
-            'email' => 'Email',
-            'password' => 'Password',
-            'role_id' => 'Role ID',
-            'authKey' => 'Auth Key',
+            'email' => 'Почта',
+            'password' => 'Пароль',
+            'role_id' => 'Роль',
+            'name' => 'Имя',
         ];
     }
 
@@ -105,19 +108,23 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->authKey === $authKey;
     }
 
-    public function getRoleId() {
+    public function getRoleId()
+    {
         return $this->role;
     }
 
-    public function getIsAdmin() {
+    public function getIsAdmin()
+    {
         return $this->role_id == 2;
     }
 
-    public static function findByUsername($email) {
+    public static function findByUsername($email)
+    {
         return self::findOne(['email' => $email]);
     }
 
-    public function validatePassword($password) {
+    public function validatePassword($password)
+    {
         return Yii::$app->security->validatePassword($password, $this->password);
     }
 }

@@ -70,23 +70,21 @@ class UserController extends ActiveController
 
     public function actionRegister()
     {
-        $model = new User(['scenario' => 'register']);
+        $model = new User(['scenario' => User::REGISTER]);
 
-        if ($model->load(Yii::$app->request->post(), '')) {
-            if ($model->validate()) {
-                $model->role_id = Role::getRole('user');
-                $model->password = Yii::$app->security->generatePasswordHash($model->password);
-                $model->save();
-                return $this->asJson([
-                    'success' => true,
-                ]);
-            } else {
-                Yii::$app->response->statusCode = 422;
-                return $this->asJson([
-                    'message' => 'invalid fields',
-                    'errors' => $model->errors,
-                ]);
-            }
+        $model->load(Yii::$app->request->post(), '');
+        if ($model->validate()) {
+            $model->password = Yii::$app->security->generatePasswordHash($model->password);
+            $model->save(false);
+            return $this->asJson([
+                'success' => true,
+            ]);
+        } else {
+            Yii::$app->response->statusCode = 422;
+            return $this->asJson([
+                'message' => 'invalid fields',
+                'errors' => $model->errors,
+            ]);
         };
     }
 
@@ -98,7 +96,7 @@ class UserController extends ActiveController
 
         if ($model->validate()) {
             $user = User::findOne(['email' => $model->email]);
-            if (Yii::$app->security->validatePassword($model->password, $user->password)) {
+            if ($user && Yii::$app->security->validatePassword($model->password, $user->password)) {
                 $user->authKey = Yii::$app->security->generateRandomString();
                 $user->save(false);
                 return $this->asJson([

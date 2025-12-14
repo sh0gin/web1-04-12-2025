@@ -17,42 +17,43 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'jdfsmgkljsdfpkgf',
             'baseUrl' => '',
-            // 'parsers' => [
-            //     'application/json' => 'yii\web\JsonParser',
-            //     'multipart/form-data' => 'yii\web\MultipartFormDataParser'
-            // ]
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+                'multipart/form-data' => 'yii\web\MultipartFormDataParser'
+            ]
         ],
-        // 'response' => [
-        //     'format' => yii\web\Response::FORMAT_JSON,
-        //     'charset' => 'UTF-8',
-        //     'class' => 'yii\web\Response',
-        //     'on beforeSend' => function ($event) {
-        //         $response = $event->sender;
-        //         if ($response->statusCode == 404) {
-        //             $response->data = [
-        //                 'message' => "not-found",
-        //             ];
-        //         }
-        //         if ($response->statusCode == 401) {
-        //             $response->data = [
-        //                 'message' => "login failed",
-        //             ];
-        //         }
-        //         if ($response->statusCode == 403) {
-        //             $response->data = [
-        //                 'message' => "forbidden for you",
-        //             ];
-        //         }
-        //     },
-        //     'formatters' => [
-        //         \yii\web\Response::FORMAT_JSON => [
-        //             'class' => 'yii\web\JsonResponseFormatter',
-        //             'prettyPrint' => YII_DEBUG, // use "pretty" output in debug mode
-        //             'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
-        //             // ...
-        //         ],
-        //     ],
-        // ],
+        'response' => [
+            'format' => yii\web\Response::FORMAT_JSON,
+            'charset' => 'UTF-8',
+            'class' => 'yii\web\Response',
+            'on beforeSend' => function ($event) {
+                $response = $event->sender;
+                if ($response->statusCode == 404) {
+                    $response->data = [
+                        'message' => "not-found",
+                    ];
+                }
+                if ($response->statusCode == 401) {
+                    Yii::$app->response->statusCode = 403;
+                    // $response->data = [
+                    //     'message' => "login failed",
+                    // ];
+                }
+                if ($response->statusCode == 403) {
+                    $response->data = [
+                        'message' => "forbidden for you",
+                    ];
+                }
+            },
+            'formatters' => [
+                \yii\web\Response::FORMAT_JSON => [
+                    'class' => 'yii\web\JsonResponseFormatter',
+                    'prettyPrint' => YII_DEBUG, // use "pretty" output in debug mode
+                    'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
+                    // ...
+                ],
+            ],
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
@@ -109,6 +110,9 @@ $config = [
 
                 "GET school-api/orders" => 'site/get-user-courses',
                 "OPTIONS orders" => 'site/options',
+
+                "POST school-api/payment-webhook" => 'site/payment-webhook',
+                "OPTIONS school-api/payment-webhook" => 'site/payment-webhook',
             ],
         ]
 

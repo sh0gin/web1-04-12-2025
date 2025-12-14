@@ -56,8 +56,15 @@ class Role extends \yii\db\ActiveRecord
         return $this->hasMany(User::class, ['role_id' => 'id']);
     }
 
-    public static function getRole($role) {
+    public static function getRole($role): int {
         return self::findOne(['role' => $role])->id;
     }
 
+    public static function getTitle($id): string {
+        return self::findOne($id)->role;
+    }
+
+    public static function getTitleAll(): array {
+        return self::find()->select('role')->indexBy('id')->column();
+    }
 }

@@ -1,7 +1,8 @@
 <?php
 
+use app\models\Courses;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap5\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var app\models\Video $model */
@@ -15,33 +16,21 @@ use yii\widgets\ActiveForm;
                 <?php $form = ActiveForm::begin([
                     'id' => 'course-form',
                 ]); ?>
-                <div class="mb-5">
-                    <?= $form->field($model, 'name', ['options' => ['class' => "form-label fs-2"]])->textInput(['options' => ['class' => "form-control fs-2"]])->input('text', ['placeholder' => 'Название курса']) ?>
-                </div>
-                <div class="mb-5">
-                    <?= $form->field($model, 'description', ['options' => ['class' => "form-label fs-2"]])->textInput(['options' => ['class' => "form-control fs-2"]])->input('text', ['placeholder' => 'Описание курса']) ?>
-                </div>
-                <div class="mb-5">
-                    <?= $form->field($model, 'hours', ['options' => ['class' => "form-label fs-2"]])->textInput(['options' => ['class' => "form-control fs-2"]])->input('text', ['placeholder' => 'Количество часов']) ?>
-                </div>
-                <div class="mb-5">
-                    <?= $form->field($model, 'price', ['options' => ['class' => "form-label fs-2"]])->textInput(['options' => ['class' => "form-control fs-2"]])->input('text', ['placeholder' => 'Стоимость']) ?>
-                </div>
-                <div class="mb-5">
-                    <?= $form->field($model, 'start_date', ['options' => ['class' => "form-label fs-2"]])->textInput(['type' => 'date', 'options' => ['class' => "form-control fs-2"]]) ?>
-                </div>
-                <div class="mb-5">
-                    <?= $form->field($model, 'end_date', ['options' => ['class' => "form-label fs-2"]])->textInput(['type' => 'date', 'options' => ['class' => "form-control fs-2"]]) ?>
-                </div>
-                <div class="mb-5">
-                    <?= $form->field($model, 'img', ['options' => ['class' => "form-label fs-2"]])->fileInput(['options' => ['class' => "form-control fs-2"]]) ?>
-                </div>
+                <?= $form->field($model, 'courses_id')->dropDownList(Courses::find()->select('name')->indexBy('id')->column()) ?>
+
+                <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+
+                <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+
+                <?= $form->field($model, 'video_link')->textInput(['maxlength' => true]) ?>
+
+                <?= $form->field($model, 'hours')->textInput() ?>
 
 
 
                 <div class="form-group">
                     <div>
-                        <?= Html::submitButton('Login', ['class' => 'btn btn-primary w-100 my-2 fs-2', 'name' => 'login-button']) ?>
+                        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-primary w-100 my-2 fs-2', 'name' => 'login-button']) ?>
                     </div>
                 </div>
                 <?php ActiveForm::end(); ?>

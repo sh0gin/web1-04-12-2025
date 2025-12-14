@@ -45,7 +45,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         <nav class="mt-3 d-flex justify-content-between fs-2">
             <a href="/course-admin/courses" class="text-primary text-decoration-none">Курсы</a>
             <a href="/course-admin/video" class="text-primary text-decoration-none">Лекции</a>
-            <a href="/course-admin/user" class="text-primary text-decoration-none">Юзеры</a>
+            <a href="/course-admin/user" class="text-primary text-decoration-none">Пользователи</a>
             <?php if (!Yii::$app->user->isGuest) { ?>
                 <a href="/course-admin/default/logout" class="text-primary text-decoration-none">Выйти</a>
             <?php
@@ -59,12 +59,10 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
     
 
-    <div class='offset'>
-        <section class="container">
+        <section class="container table-position">
             <?= $content ?>
         </section>
 
-    </div>
     <?php $this->endBody() ?>
 </body>
 
