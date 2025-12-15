@@ -38,7 +38,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             [['authKey'], 'default', 'value' => null],
             [['role_id'], 'default', 'value' => 1],
-            [['email', 'password', 'name'], 'required'],
+            [['email', 'password'], 'required'],
+            ['name', 'required', 'on' => self::REGISTER],
             [['role_id'], 'integer'],
             [['email', 'password', 'authKey', 'name'], 'string', 'max' => 255],
             [['email'], 'unique', 'on' => self::REGISTER],

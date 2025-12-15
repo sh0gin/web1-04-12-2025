@@ -48,37 +48,42 @@ $this->params['breadcrumbs'][] = $this->title;
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($dataProvider->models as $value) { 
+            <?php foreach ($dataProvider->models as $value) {
                 if ($value->userOrders) {
 
-                ?>
-                
-                <tr>
-                    <td><?= $value->name ?></td>
-                    <td><?= $value->email ?></td>
-                    <td><?= Courses::getTitle($value->userOrders[0]->course_id) ?></td>
-                    <td><?= $value->userOrders[0]->created_at ?></td>
-                    <td><?= PaymentStatus::getTitle($value->userOrders[0]->payment_status_id) ?></td>
-                    <td><?= Courses::findOne($value->userOrders[0]->course_id)->end_date < date('Y-m-d')
-                        ? Html::a("Выдать сертификат", ['user/sert', 'id' => $value->id, 'course_id' => $value->userOrders[0]->course_id], ['class' => 'btn btn-success'])
-                        : "Курс не пройден"
-                    ?></td>
+            ?>
 
-                    <!-- <td class="text-end">
-                        <div class="btn-group" role="group">
-                            <a href="/courseadmin/courses/view?view={$value->id}" type="button" class="btn btn-lg btn-outline-primary no-reverse">
-                                <img src="/courseadmin/img/icons/eye.svg" alt="eye" class="action-image">
-                            </a>
-                            <a href="add_category.html" type="button" class="btn btn-lg btn-outline-success no-reverse">
-                                <img src="/courseadmin/img/icons/pencil.svg" alt="eye" class="action-image">
-                            </a>
-                            <a href="" type="button" class="btn btn-lg btn-outline-danger no-reverse">
-                                <img src="/courseadmin/img/icons/trash.svg" alt="eye" class="action-image">
-                            </a>
-                        </div>
-                    </td> -->
-                </tr>
-            <?php }} ?>
+                    <tr>
+                        <td><?= $value->name ?></td>
+                        <td><?= $value->email ?></td>
+                        <td><?= Courses::getTitle($value->userOrders[0]->course_id) ?></td>
+                        <td><?= $value->userOrders[0]->created_at ?></td>
+                        <td><?= PaymentStatus::getTitle($value->userOrders[0]->payment_status_id) ?></td>
+                        <td><?= Courses::findOne($value->userOrders[0]->course_id)->end_date < date('Y-m-d')
+                                ? Html::a("Выдать сертификат", ['user/sert', 'id' => $value->id, 'course_id' => $value->userOrders[0]->course_id], ['class' => 'btn btn-success'])
+                                : "Курс не пройден"
+                            ?></td>
+
+                    </tr>
+            <?php }}?>
+
+
+
+
+            
+            <!-- <td class="text-end">
+    <div class="btn-group" role="group">
+        <a href="/courseadmin/courses/view?view={$value->id}" type="button" class="btn btn-lg btn-outline-primary no-reverse">
+            <img src="/courseadmin/img/icons/eye.svg" alt="eye" class="action-image">
+        </a>
+        <a href="add_category.html" type="button" class="btn btn-lg btn-outline-success no-reverse">
+            <img src="/courseadmin/img/icons/pencil.svg" alt="eye" class="action-image">
+        </a>
+        <a href="" type="button" class="btn btn-lg btn-outline-danger no-reverse">
+            <img src="/courseadmin/img/icons/trash.svg" alt="eye" class="action-image">
+        </a>
+    </div>
+</td> -->
 
         </tbody>
     </table>

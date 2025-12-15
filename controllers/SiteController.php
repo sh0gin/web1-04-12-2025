@@ -268,18 +268,21 @@ class SiteController extends ActiveController
     {
         $model = UserOrder::findOne(['user_id' => Yii::$app->user->id, 'course_id' => $id]);
 
+
         if ($model) {
-            if ($model->payment_status_id == 1) {
+            if ($model->payment_status_id != 2) {
                 $model->delete();
                 return $this->asJson([
                     'status' => 'success'
                 ]);
             } else {
-                Yii::$app->response->statusCode = 401;
+                Yii::$app->response->statusCode = 418;
+                return $this->asJson([
+                    'status' => 'was payed',
+                ]);
             };
-        } else {
-            Yii::$app->response->statusCode = 401;
         }
+        Yii::$app->response->statusCode = 401;
     }
 
     public function actionPaymentWebhook()
