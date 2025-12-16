@@ -25,12 +25,16 @@ use yii\bootstrap5\ActiveForm;
                     <?= $form->field($model, 'hours', ['options' => ['class' => "form-label fs-2"]])->textInput(['options' => ['class' => "form-control fs-2"]])->input('text', ['placeholder' => 'Количество часов']) ?>
                 </div>
                 <div class="mb-5">
-                    <?= $form->field($model, 'price', ['options' => ['class' => "form-label fs-2"]])->textInput(['options' => ['class' => "form-control fs-2"], "value" => '122.00'
+                    <?= $form->field($model, 'price', ['options' => ['class' => "form-label fs-2"]])->textInput([
+                        'options' => ['class' => "form-control fs-2"],
+                        "value" => '122.00'
                     ])->input('text', ['placeholder' => 'Стоимость']) ?>
                 </div>
                 <div class="mb-5">
-                    <?= $form->field($model, 'start_date', ['options' => ['class' => "form-label fs-2"]])->textInput(['type' => 'date', 'options' => ['class' => "form-control fs-2"]]) ?>
-                </div> 
+                    <?= $form->field($model, 'start_date', ['options' => ['class' => "form-label fs-2"]])->textInput(['type' => 'date', 'options' => ['class' => "form-control fs-2"]])->widget(\yii\widgets\MaskedInput::class, [
+                        'mask' => '99-99-9999'
+                    ]) ?>
+                </div>
                 <div class="mb-5">
                     <?= $form->field($model, 'end_date', ['options' => ['class' => "form-label fs-2"]])->textInput(['type' => 'date', 'options' => ['class' => "form-control fs-2"]]) ?>
                 </div>

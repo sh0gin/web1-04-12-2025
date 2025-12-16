@@ -112,7 +112,7 @@ $config = [
                 "OPTIONS orders" => 'site/options',
 
                 "POST school-api/payment-webhook" => 'site/payment-webhook',
-                "OPTIONS school-api/payment-webhook" => 'site/payment-webhook',
+                "OPTIONS school-api/payment-webhook" => 'site/options',
             ],
         ]
 

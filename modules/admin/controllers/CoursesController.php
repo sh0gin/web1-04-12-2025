@@ -29,7 +29,7 @@ class CoursesController extends Controller
                 'verbs' => [
                     'class' => VerbFilter::class,
                     'actions' => [
-                        'delete' => ['POST'],
+                        // 'delete' => ['POST'],
                     ],
                 ],
             ]
@@ -136,8 +136,9 @@ class CoursesController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
 
+        $this->findModel($id)->delete();
+        
         return $this->redirect(['index']);
     }
 

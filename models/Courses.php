@@ -54,12 +54,12 @@ class Courses extends \yii\db\ActiveRecord
             [
                 ['start_date', 'end_date'],
                 'date',
-                'format' => 'php:Y-m-d',
+                'format' => 'php:d-m-Y',
             ],
             [
                 ['start_date', 'end_date'],
                 'compare',
-                'compareValue' => date('Y-m-d'),
+                'compareValue' => date('d-m-Y'),
                 'operator' => '>=',
                 'message' => 'Дата должна быть больше текущей'
             ],
@@ -92,10 +92,10 @@ class Courses extends \yii\db\ActiveRecord
     public function validateDate($attribute, $params)
     {
         $dateString = $this->$attribute;
-        $date = \DateTime::createFromFormat('Y-m-d', $dateString);
+        $date = \DateTime::createFromFormat('d-m-Y', $dateString);
         
         // почему здесь такой формат
-        if (!$date || Yii::$app->formatter->asDate($date, 'php:Y-m-d') != $dateString) {
+        if (!$date || Yii::$app->formatter->asDate($date, 'php:d-m-Y') != $dateString) {
             $this->addError($attribute, 'Дата должна быть валидной ');
         }
         if ($date < new \DateTime()) {
